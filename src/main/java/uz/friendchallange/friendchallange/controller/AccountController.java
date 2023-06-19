@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import uz.friendchallange.friendchallange.dto.AccountDto;
+import uz.friendchallange.friendchallange.dto.QuestionDto;
 import uz.friendchallange.friendchallange.model.Account;
 import uz.friendchallange.friendchallange.service.AccountService;
+
+import java.util.List;
 
 
 @Controller
@@ -19,10 +22,9 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping("/register")
-    public String createUser(Model model,@ModelAttribute AccountDto accountDto) {
+    public String createUser(@ModelAttribute AccountDto accountDto) {
         AccountDto save = accountService.create(accountDto);
-        model.addAttribute("account",save);
-        return "profile";
+        return "redirect:/login";
     }
 
     @GetMapping("/register")
@@ -50,6 +52,12 @@ public class AccountController {
             System.out.println(principal.toString());
         }
         model.addAttribute("account", account);
+        List<QuestionDto> quiz = accountService.findQuiz(account.getId());
+        if (quiz.size() != 0){
+            model.addAttribute("questionsList", quiz);
+        } else {
+            model.addAttribute("quizNotFound","Hozircha sizda Testlar yo'q");
+        }
         return "profile";
     }
 

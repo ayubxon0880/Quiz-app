@@ -1,10 +1,12 @@
 package uz.friendchallange.friendchallange.service.Impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import uz.friendchallange.friendchallange.dto.QuestionDto;
-import uz.friendchallange.friendchallange.dto.QuestionListDto;
+import uz.friendchallange.friendchallange.dto.*;
+import uz.friendchallange.friendchallange.exceptions.NotFoundException;
+import uz.friendchallange.friendchallange.exceptions.SimpleException;
 import uz.friendchallange.friendchallange.mapper.QuestionMapping;
 import uz.friendchallange.friendchallange.model.Account;
 import uz.friendchallange.friendchallange.model.Question;
@@ -15,64 +17,47 @@ import uz.friendchallange.friendchallange.service.QuestionService;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
-    @Autowired
-    private QuestionRepository questionRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    private QuestionMapping questionMapping;
+    private final QuestionRepository questionRepository;
+    private final AccountRepository accountRepository;
+    private final QuestionMapping questionMapping;
 
 
     @Override
-    public String create(Question question, String email) {
-        if (question != null) {
-            Account account = accountRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            String uuid = UUID.randomUUID().toString();
-            question.setAccount(account);
-            question.setUuid(uuid);
-            questionRepository.save(question);
-            return uuid;
-        }
-        return"none";
-    }
-
-    @Override
-    public List<QuestionDto> readAll(Integer accountId) {
-        return questionRepository.findByAccountId(accountId).map(questions -> questions.stream().map(question -> questionMapping.toDto(question)).toList()).orElse(Collections.emptyList());
-    }
-
-    @Override
-    public QuestionDto read(String id) {
-        return questionMapping.toDto(questionRepository.findByUuid(id));
-    }
-
-    @Override
-    public QuestionDto update(QuestionDto questionDto) {
-        return null;
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-        return false;
-    }
-
-    @Override
-    public String create(QuestionListDto questionListDto, String username) {
-        Optional<Account> byEmail = accountRepository.findByEmail(username);
+    public List<QuestionDto> create(QuestionsCreationDto form, String username) {
         String uuid = UUID.randomUUID().toString();
-        if (byEmail.isPresent()) {
-            for (Question question : questionListDto.getQuestions()) {
-                question.setAccount(byEmail.get());
+        Account account = accountRepository.findByEmail(username).orElseThrow(() -> new SimpleException("User not found"));
+        List<Question> questions = new ArrayList<>();
+
+
+        for (Question question : form.getQuestions()) {
+            if (question != null){
+                if (question.getAnswerA().length() == 0 &&
+                        question.getAnswerB().length() == 0 &&
+                        question.getAnswerC().length() == 0 &&
+                        question.getAnswerD().length() == 0 &&
+                        question.getCorrectId() == null &&
+                        question.getQuiz().length() == 0){
+                    return questions.stream().map(questionMapping::toDto).toList();
+                }
                 question.setUuid(uuid);
-                System.out.println("Saqlandi");
-                questionRepository.save(question);
-
+                question.setAccount(account);
+                question.setSubject(form.getSubject());
+                questions.add(questionRepository.save(question));
             }
-
-            return uuid;
         }
-        return "none";
+
+        return questions.stream().map(questionMapping::toDto).toList();
+    }
+
+    @Override
+    public List<QuestionDto> getByUuid(String uuid) {
+        Optional<List<Question>> questions = questionRepository.findByUuid(uuid);
+
+        return questions.orElseThrow(() -> new NotFoundException("User not found"))
+                .stream()
+                .map(questionMapping::toDto)
+                .toList();
     }
 }

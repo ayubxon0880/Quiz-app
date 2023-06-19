@@ -1,16 +1,12 @@
 package uz.friendchallange.friendchallange.service;
 
 import uz.friendchallange.friendchallange.dto.QuestionDto;
-import uz.friendchallange.friendchallange.dto.QuestionListDto;
-import uz.friendchallange.friendchallange.model.Question;
+import uz.friendchallange.friendchallange.dto.QuestionsCreationDto;
 
 import java.util.List;
 
 public interface QuestionService {
-    String create(Question question, String email);
-    List<QuestionDto> readAll(Integer accountId);
-    QuestionDto read(String id);
-    QuestionDto update(QuestionDto questionDto);
-    boolean delete(Integer id);
-    String create(QuestionListDto questionListDto, String username);
+    List<QuestionDto> create(QuestionsCreationDto form, String username);
+
+    List<QuestionDto> getByUuid(String uuid);
 }

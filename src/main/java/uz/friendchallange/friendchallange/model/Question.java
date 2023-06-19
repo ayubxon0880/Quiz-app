@@ -1,6 +1,7 @@
 package uz.friendchallange.friendchallange.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,11 +15,20 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String uuid;
-    private String userQuiz;
-    private String correctAnswer;
-    private String wrong1;
-    private String wrong2;
-    private String wrong3;
+    @NotBlank
+    private String quiz;
+    @NotBlank
+    private String answerA;
+    @NotBlank
+    private String answerB;
+    @NotBlank
+    private String answerC;
+    @NotBlank
+    private String answerD;
+    @NotBlank
+    private String correctId;
+    @NotBlank
+    private String subject;
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;

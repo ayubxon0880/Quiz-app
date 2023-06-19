@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <title>Quiz</title>
+</head>
+
+<style>
+    .center {
+        margin: auto;
+        width: 80%;
+        border: 3px solid green;
+        padding: 10px;
+    }
+</style>
+
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="${''}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/profile'}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/question'}">Savol qo'shish</a>
+                </li>
+
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto" href="#">Quiz</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/logout'}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${'/register'}">Sign up</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--class="container d-flex align-items-center justify-content-center"-->
+<div class="container d-flex align-items-center justify-content-center">
+    <h1 th:text="${questions.get(0).subject}"/>
+</div>
+<div th:each="quiz: ${questions}">
+    <div class="center">
+        <div class="container d-flex align-items-center justify-content-center">
+            <p th:text="${quiz.quiz}"/>
+        </div>
+        <div class="form-check">
+            <input type="radio" class="form-check-input" th:id="${quiz.answerA}" th:name="${quiz.id}" value="option1">
+            <label class="form-check-label" th:for="${quiz.answerA}" th:text="${quiz.answerA}" />
+        </div>
+        <div class="form-check">
+            <input type="radio" class="form-check-input" th:id="${quiz.answerB}" th:name="${quiz.id}" value="option2">
+            <label class="form-check-label" th:for="${quiz.answerB}" th:text="${quiz.answerB}"/>
+        </div>
+        <div class="form-check">
+            <input type="radio" class="form-check-input" th:id="${quiz.answerC}" th:name="${quiz.id}" value="option2">
+            <label class="form-check-label" th:for="${quiz.answerC}" th:text="${quiz.answerC}"/>
+        </div>
+        <div class="form-check">
+            <input type="radio" class="form-check-input" th:id="${quiz.answerD}" th:name="${quiz.id}" value="option2">
+            <label class="form-check-label" th:for="${quiz.answerD}" th:text="${quiz.answerD}"/>
+        </div>
+    </div>
+    <br>
+</div>
+
+<div class="container d-flex align-items-center justify-content-center">
+    <button onclick="check()">Tekshirish</button>
+</div>
+
+
+<script th:inline="javascript">
+    function check() {
+        let questions = [[${questions}]]
+        Object.keys(questions).forEach(key => {
+            console.log(key, questions[key].answerA);
+
+        });
+
+        // for (let i = 0; i < questions.length; i++) {
+        //     document.getElementById(questions.get(i).a)
+        //     document.getElementById(questions.get(i).b)
+        //     document.getElementById(questions.get(i).c)
+        //     document.getElementById(questions.get(i).d)
+        //
+        //     console.log(questions.get(i))
+        // }
+    }
+    document.getElementById("")
+</script>
+
+</body>
+</html>

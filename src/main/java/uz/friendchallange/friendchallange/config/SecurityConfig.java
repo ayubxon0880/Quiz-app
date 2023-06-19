@@ -16,7 +16,6 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(c->c.disable())
                 .authorizeHttpRequests(
                         (request) ->
                                 request
@@ -24,13 +23,12 @@ public class SecurityConfig {
                                         .permitAll()
                                         .requestMatchers(
                                                 "/profile",
-                                                "/question"
+                                                "/question/**"
                                         ).authenticated()
                                         .anyRequest()
                                         .permitAll()
                 );
 
-        System.out.println("login");
         http.formLogin(Customizer.withDefaults());
         http.logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/"));
         http.httpBasic(Customizer.withDefaults());

@@ -10,7 +10,6 @@ import java.util.Optional;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
     Optional<List<Question>> findByAccountId(Integer accountId);
-    Question findByUuid(String uuid);
-
+    Optional<List<Question>> findByUuid(String uuid);
 
 }
