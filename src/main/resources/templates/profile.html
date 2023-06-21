@@ -77,26 +77,10 @@
                     <div class="col-md-6">
                         <div id="questions" class="card mb-4 mb-md-0">
                             <p class="mt-4 mb-1" style="font-size: .77rem;" th:text="${quizNotFound}"/>
-                            <div class="card-body">
-                                <a/>
+                            <div class="card-body" th:each="subject_uuid: ${subjectAndUuid}">
+                                <a th:href="'question/'+${subject_uuid.uuid}" th:text="${subject_uuid.subject}"/>
                             </div>
                         </div>
-
-                        <script th:inline="javascript">
-                            let questions = [[${questionsList}]]
-                            let subject = "";
-                            Object.keys(questions).forEach(key => {
-                                let currentSubject = questions[key].subject;
-                                if (currentSubject !== subject){
-                                    document.getElementById("questions").innerHTML = `<div class="card-body">
-                                                                                          <a href="/question/${questions[key].uuid}">${currentSubject}</a>
-                                                                                      </div>`
-                                }
-                                subject = currentSubject;
-
-
-                            });
-                        </script>
                     </div>
 <!--                    <div class="col-md-6">-->
 <!--                        <div class="card mb-4 mb-md-0">-->

@@ -6,11 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.Authentication;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountDto {
+
     private Integer id;
     @NotEmpty
     private String name;

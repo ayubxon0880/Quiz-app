@@ -22,9 +22,10 @@
 <div th:insert="navbar.html :: navbar"></div>
 
 <form action="#" th:action="@{/question/save}" th:object="${form}" method="post">
+    <div class="container d-flex align-items-center justify-content-center">
+        <button type="submit" class="btn btn-outline-success">Saqlash</button>
+    </div>
     <fieldset>
-        <input type="submit" id="submitButton" th:value="Save">
-        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
 
         <div th:each="question, itemStat : *{questions}" class="center" th:id="'quiz-div-'+${itemStat.index}">
             <p th:text="${itemStat.index+1}+'-Savol'">
@@ -64,6 +65,7 @@
                            th:field="*{questions[__${itemStat.index}__].answerD}">
                 </div>
             </div>
+
             <p th:id="'radioError-'+${itemStat.index}"></p>
             <input type="radio" class="btn-check" autocomplete="off"
                    th:id="'radio-a-'+${itemStat.index}"
@@ -76,7 +78,7 @@
             <input type="radio" class="btn-check" autocomplete="off"
                    th:id="'radio-b-'+${itemStat.index}"
                    th:name="'radio-'+${itemStat.index}" value="b"
-                   th:field="*{questions[__${itemStat.index}__].correctId}" />
+                   th:field="*{questions[__${itemStat.index}__].correctId}"/>
             <label class="btn btn-outline-success" th:for="'radio-b-'+${itemStat.index}">
                 B
             </label>
@@ -84,7 +86,7 @@
             <input type="radio" class="btn-check" autocomplete="off"
                    th:id="'radio-c-'+${itemStat.index}"
                    th:name="'radio-'+${itemStat.index}" value="c"
-                   th:field="*{questions[__${itemStat.index}__].correctId}" />
+                   th:field="*{questions[__${itemStat.index}__].correctId}"/>
             <label class="btn btn-outline-success" th:for="'radio-c-'+${itemStat.index}">
                 C
             </label>
@@ -92,13 +94,24 @@
             <input type="radio" class="btn-check" autocomplete="off"
                    th:id="'radio-d-'+${itemStat.index}"
                    th:name="'radio-'+${itemStat.index}" value="d"
-                   th:field="*{questions[__${itemStat.index}__].correctId}" />
+                   th:field="*{questions[__${itemStat.index}__].correctId}"/>
             <label class="btn btn-outline-success" th:for="'radio-d-'+${itemStat.index}">
                 D
             </label>
         </div>
     </fieldset>
-    <input type="text" th:field="*{subject}"/>
+
+    <div class="container d-flex align-items-center justify-content-center">
+        <p id="error-subject" style="color: red"></p>
+    </div>
+    <div id="subject_div" class="container d-flex align-items-center justify-content-center">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Testlaringiz uchun Mavzu tanlang"
+                   id="subject_input"
+                   th:field="*{subject}">
+        </div>
+    </div>
+
     <div class="container d-flex align-items-center justify-content-center">
         <button type="button" class="btn btn-outline-primary" id="addbtn" onclick="divnone()">Savol qo'shish</button>
     </div>
@@ -113,34 +126,41 @@
     }
 
     function divnone() {
-        let question = document.getElementById("question-"+questionCount).value;
-        let a = document.getElementById("answer-a-"+questionCount).value;
-        let b = document.getElementById("answer-b-"+questionCount).value;
-        let c = document.getElementById("answer-c-"+questionCount).value;
-        let d = document.getElementById("answer-d-"+questionCount).value;
+        let question = document.getElementById("question-" + questionCount).value;
+        let a = document.getElementById("answer-a-" + questionCount).value;
+        let b = document.getElementById("answer-b-" + questionCount).value;
+        let c = document.getElementById("answer-c-" + questionCount).value;
+        let d = document.getElementById("answer-d-" + questionCount).value;
 
-        let radio_a = document.getElementById("radio-a-"+questionCount);
-        let radio_b = document.getElementById("radio-b-"+questionCount);
-        let radio_c = document.getElementById("radio-c-"+questionCount);
-        let radio_d = document.getElementById("radio-d-"+questionCount);
-        let radio_error = document.getElementById("radioError-"+questionCount);
+        let radio_a = document.getElementById("radio-a-" + questionCount);
+        let radio_b = document.getElementById("radio-b-" + questionCount);
+        let radio_c = document.getElementById("radio-c-" + questionCount);
+        let radio_d = document.getElementById("radio-d-" + questionCount);
+        let radio_error = document.getElementById("radioError-" + questionCount);
 
+        let subjectInput = document.getElementById("subject_input");
 
-
-        if (question.length < 3){
+        if (question.length < 3) {
             alert("Savol 3 ta harfdan ko'p bo'lsin")
-        } else if (question.length > 256){
+        } else if (question.length > 256) {
             alert("Savol 256 ta harfdan kam bo'lsin")
-        } else if (a.length === 0 || b.length === 0 || c.length === 0 || d.length === 0){
+        } else if (a.length === 0 || b.length === 0 || c.length === 0 || d.length === 0) {
             alert("Variant bo'sh bo'lishi mumkin emas")
         } else if (a.length === 100 || b.length === 100 || c.length === 100 || d.length === 100) {
             alert("Variant 100 ta harfdan ko'p bo'lishi mumkin emas")
         } else if (!(radio_a.checked || radio_b.checked || radio_c.checked || radio_d.checked)) {
             radio_error.innerText = "To'g'ri javobni belgilang !!!"
+        } else if (questionCount === 0 && subjectInput.value.length < 3 || subjectInput.value.length > 100){
+            document.getElementById("error-subject").innerText = "Mavzu uzunligi 3tadan ko'p va 100tadan kam bo'lsin"
         } else {
             document.getElementById("quiz-div-" + questionCount).style.display = "none";
             questionCount++;
             document.getElementById("quiz-div-" + questionCount).style.display = "block";
+            if (questionCount !== 0){
+                document.getElementById("error-subject").style.display = "none"
+                subjectInput.readOnly = true;
+                subjectInput.style.display = "none"
+            }
         }
     }
 

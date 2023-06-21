@@ -22,12 +22,16 @@ public class QuestionController {
 
     @PostMapping("/question/save")
     public String saveBooks(@Valid @ModelAttribute QuestionsCreationDto form, Model model) {
-        System.out.println(form.getSubject());
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails userDetails) {
             String username = userDetails.getUsername();
             List<QuestionDto> questions = questionService.create(form, username);
+            if (questions.size() == 0){
+                model.addAttribute("message","Hech narsa saqlanmadi qaytadan urinib ko'ring");
+
+                return "wrong";
+            }
             model.addAttribute("questions", questions);
             return "redirect:/question/"+questions.get(0).getUuid();
         }

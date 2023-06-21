@@ -1,13 +1,9 @@
 package uz.friendchallange.friendchallange.dto;
 
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uz.friendchallange.friendchallange.model.Account;
 
 @AllArgsConstructor
 @NoArgsConstructor

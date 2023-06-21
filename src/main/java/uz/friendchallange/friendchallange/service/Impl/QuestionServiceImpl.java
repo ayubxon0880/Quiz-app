@@ -60,4 +60,19 @@ public class QuestionServiceImpl implements QuestionService {
                 .map(questionMapping::toDto)
                 .toList();
     }
+
+    @Override
+    public List<SubjectUuidDto> findSubjects(Integer id) {
+        List<Question> questions = questionRepository.findByAccountId(id).orElseThrow(() -> new NotFoundException("Questions not found"));
+        List<SubjectUuidDto> list = new ArrayList<>();
+
+        for (Question question : questions) {
+            SubjectUuidDto dto = new SubjectUuidDto(question.getUuid(), question.getSubject());
+            if (!list.contains(dto)){
+                list.add(dto);
+            }
+        }
+
+        return list;
+    }
 }

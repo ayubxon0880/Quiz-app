@@ -1,7 +1,6 @@
 package uz.friendchallange.friendchallange.service;
 
 import uz.friendchallange.friendchallange.dto.AccountDto;
-import uz.friendchallange.friendchallange.dto.Book;
 import uz.friendchallange.friendchallange.dto.QuestionDto;
 import uz.friendchallange.friendchallange.model.Account;
 

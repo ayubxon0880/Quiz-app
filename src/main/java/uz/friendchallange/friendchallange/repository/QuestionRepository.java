@@ -1,6 +1,7 @@
 package uz.friendchallange.friendchallange.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.friendchallange.friendchallange.model.Question;
 
@@ -11,5 +12,4 @@ import java.util.Optional;
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
     Optional<List<Question>> findByAccountId(Integer accountId);
     Optional<List<Question>> findByUuid(String uuid);
-
 }
