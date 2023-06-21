@@ -13,5 +13,4 @@ public interface AccountService {
 
     List<QuestionDto> findQuiz(Integer id);
 
-    List<Book> findAll();
 }

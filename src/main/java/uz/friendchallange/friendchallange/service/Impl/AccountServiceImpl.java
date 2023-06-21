@@ -52,8 +52,4 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         return questionRepository.findByAccountId(id).map(questions -> questions.stream().map(questionMapping::toDto).toList()).orElse(Collections.emptyList());
     }
 
-    @Override
-    public List<Book> findAll() {
-        return null;
-    }
 }
